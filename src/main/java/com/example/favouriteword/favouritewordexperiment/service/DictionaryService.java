@@ -25,6 +25,10 @@ public class DictionaryService {
         String url = DICTIONARY_API_URL + word;
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return new DictionaryResult(false, null, null, DictionaryErrorType.INVALID_WORD);
+            }
+
             if (response.getStatusCode().is2xxSuccessful()) {
                 String sampleDefinition = getSampleDefinition(word.toLowerCase());
                 return new DictionaryResult(true, word.toLowerCase(), sampleDefinition, DictionaryErrorType.NONE);
