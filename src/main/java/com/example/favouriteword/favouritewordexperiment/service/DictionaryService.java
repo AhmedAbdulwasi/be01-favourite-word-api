@@ -9,6 +9,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class DictionaryService {
     private final RestTemplate restTemplate;
@@ -22,9 +25,12 @@ public class DictionaryService {
         String url = DICTIONARY_API_URL + word;
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return new DictionaryResult(false, null, null, DictionaryErrorType.INVALID_WORD);
+            }
+
             if (response.getStatusCode().is2xxSuccessful()) {
-                System.out.println("API response: " + url);
-                String sampleDefinition = "Sample definition for " + word.toLowerCase();
+                String sampleDefinition = getSampleDefinition(word.toLowerCase());
                 return new DictionaryResult(true, word.toLowerCase(), sampleDefinition, DictionaryErrorType.NONE);
             }
 
@@ -40,5 +46,27 @@ public class DictionaryService {
             System.out.println("Dictionary API failure: " + e.getMessage());
             return new DictionaryResult(false, null, null, DictionaryErrorType.API_FAILURE);
         }
+    }
+    private String getSampleDefinition(String word) {
+        String url = DICTIONARY_API_URL + word;
+
+        List<Map<String, Object>> entries = restTemplate.getForObject(url, List.class);
+        if (entries == null || entries.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Object> firstEntry = entries.get(0);
+        List<Map<String, Object>> meanings = (List<Map<String, Object>>) firstEntry.get("meanings");
+        if (meanings == null || meanings.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Object> meaning = meanings.get(0);
+        List<Map<String, Object>> definitions = (List<Map<String, Object>>) meaning.get("definitions");
+        if (definitions == null || definitions.isEmpty()) {
+            return null;
+        }
+
+        return (String) definitions.get(0).get("definition");
     }
 }

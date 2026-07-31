@@ -6,7 +6,18 @@ I've found simple experimental websites to be very intriguing and I've began to 
 
 
 ## How To Use
-1) Coming Soon...
+1. Create database:
+   CREATE DATABASE favourite_word_db;
+
+2. Update application.properties with your MySQL username/password.
+
+3. Run the app:
+   mvn spring-boot:run
+
+4. Test API (Use Postman):
+   - GET /api/health
+   - POST /api/words/submit
+   - GET /api/words/stats
 
 ## Languages and Technologies
 - Spring Boot
