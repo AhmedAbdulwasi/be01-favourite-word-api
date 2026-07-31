@@ -12,7 +12,7 @@ I've found simple experimental websites to be very intriguing and I've began to 
 2. Update application.properties with your MySQL username/password.
 
 3. Run the app:
-   mvn spring-boot:run
+   `mvn spring-boot:run`
 
 4. Test API (Use Postman):
    - GET /api/health
@@ -22,4 +22,11 @@ I've found simple experimental websites to be very intriguing and I've began to 
 ## Languages and Technologies
 - Spring Boot
 - MySQL
-- API Used: https://dictionaryapi.dev/ 
+- API Used: https://dictionaryapi.dev/
+
+## Quick Demo
+https://github.com/user-attachments/assets/849c79da-2388-4cda-8c8e-9733c315b384
+
+
+
+
