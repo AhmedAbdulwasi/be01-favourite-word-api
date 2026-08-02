@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 
@@ -27,6 +29,9 @@ public class WordVote {
     private String clientToken;
 
     @Column(nullable = false)
+    private String word;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     protected WordVote() {
@@ -35,6 +40,7 @@ public class WordVote {
     public WordVote(WordEntry wordEntry, String clientToken, LocalDateTime createdAt) {
         this.wordEntry = wordEntry;
         this.clientToken = clientToken;
+        this.word = wordEntry != null ? wordEntry.getWord() : null;
         this.createdAt = createdAt;
     }
 
@@ -56,6 +62,14 @@ public class WordVote {
 
     public void setClientToken(String clientToken) {
         this.clientToken = clientToken;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
 
     public LocalDateTime getCreatedAt() {

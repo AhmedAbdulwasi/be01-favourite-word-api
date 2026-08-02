@@ -51,7 +51,7 @@ public class DictionaryController {
         List<WordVote> votes = wordVoteRepository.findAll();
 
         Map<String, Long> counts = votes.stream()
-                .collect(Collectors.groupingBy(vote -> vote.getWordEntry().getWord(), Collectors.counting()));
+                .collect(Collectors.groupingBy(vote -> vote.getWord() != null ? vote.getWord() : vote.getWordEntry().getWord(), Collectors.counting()));
 
         List<WordStatsResponse.WordCount> words = counts.entrySet().stream()
                 .map(entry -> new WordStatsResponse.WordCount(entry.getKey(), entry.getValue()))
